@@ -16,18 +16,18 @@ Endpoints:
   POST /pipeline/run       → trigger full pipeline (admin)
 """
 
+# flake8: noqa: E402
 import logging
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parents[2]))
 
-import pandas as pd  # noqa: E402
-from fastapi import FastAPI, HTTPException, Query  # noqa: E402
-from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
-
-from src.ml.models import MODEL_DIR, AnomalyDetector, RevenueForecaster  # noqa: E402
-from src.pipeline.kpis import CLEAN_PATH, compute_all_kpis  # noqa: E402
+import pandas as pd
+from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
+from src.ml.models import MODEL_DIR, AnomalyDetector, RevenueForecaster
+from src.pipeline.kpis import CLEAN_PATH, compute_all_kpis
 
 logger = logging.getLogger(__name__)
 
