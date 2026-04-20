@@ -26,6 +26,7 @@ sys.path.insert(0, str(Path(__file__).parents[2]))
 import pandas as pd
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+
 from src.ml.models import MODEL_DIR, AnomalyDetector, RevenueForecaster
 from src.pipeline.kpis import CLEAN_PATH, compute_all_kpis
 
@@ -55,14 +56,10 @@ async def startup_event():
     logger.info("Loading ML models...")
     try:
         app.state.detector = AnomalyDetector.load(MODEL_DIR / "anomaly_detector.pkl")
-        app.state.forecaster = RevenueForecaster.load(
-            MODEL_DIR / "revenue_forecaster.pkl"
-        )
+        app.state.forecaster = RevenueForecaster.load(MODEL_DIR / "revenue_forecaster.pkl")
         logger.info("Models loaded successfully ✓")
     except FileNotFoundError:
-        logger.warning(
-            "Models not found. Run `python -m src.ml.models` to train them first."
-        )
+        logger.warning("Models not found. Run `python -m src.ml.models` to train them first.")
         app.state.detector = None
         app.state.forecaster = None
 
@@ -140,9 +137,7 @@ def kpi_repeat_purchase():
 # ─────────────────────────────────────────────
 @app.get("/ml/forecast", tags=["ML"])
 def revenue_forecast(
-    weeks: int = Query(
-        default=12, ge=1, le=52, description="Number of weeks to forecast"
-    )
+    weeks: int = Query(default=12, ge=1, le=52, description="Number of weeks to forecast")
 ):
     """
     Forecasts net revenue for the next N weeks using
@@ -163,9 +158,7 @@ def revenue_forecast(
 
 @app.get("/ml/anomalies", tags=["ML"])
 def anomaly_report(
-    top_n: int = Query(
-        default=20, ge=1, le=200, description="Number of top anomalies to return"
-    )
+    top_n: int = Query(default=20, ge=1, le=200, description="Number of top anomalies to return")
 ):
     """
     Returns the most anomalous orders detected by IsolationForest,
@@ -216,9 +209,7 @@ def run_pipeline():
 
         # Reload models
         app.state.detector = AnomalyDetector.load(MODEL_DIR / "anomaly_detector.pkl")
-        app.state.forecaster = RevenueForecaster.load(
-            MODEL_DIR / "revenue_forecaster.pkl"
-        )
+        app.state.forecaster = RevenueForecaster.load(MODEL_DIR / "revenue_forecaster.pkl")
 
         return {"status": "success", "ml_results": results}
     except Exception as e:
