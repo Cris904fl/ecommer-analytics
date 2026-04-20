@@ -7,15 +7,16 @@ Models:
 """
 
 import logging
-import pandas as pd
-import numpy as np
 from pathlib import Path
+
+import joblib
+import numpy as np
+import pandas as pd
 from sklearn.ensemble import IsolationForest
 from sklearn.linear_model import LinearRegression
-from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_absolute_error, mean_absolute_percentage_error
 from sklearn.model_selection import train_test_split
-import joblib
+from sklearn.preprocessing import StandardScaler
 
 logger = logging.getLogger(__name__)
 

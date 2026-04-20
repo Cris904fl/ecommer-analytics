@@ -22,14 +22,15 @@ from pathlib import Path
 # Allow running from project root
 sys.path.insert(0, str(Path(__file__).parents[2]))
 
+import logging
+
+import pandas as pd
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-import pandas as pd
-import logging
 
-from src.pipeline.kpis import compute_all_kpis, load_clean, CLEAN_PATH
-from src.ml.models import AnomalyDetector, RevenueForecaster, MODEL_DIR
+from src.ml.models import MODEL_DIR, AnomalyDetector, RevenueForecaster
+from src.pipeline.kpis import CLEAN_PATH, compute_all_kpis, load_clean
 
 logger = logging.getLogger(__name__)
 
@@ -210,8 +211,8 @@ def anomaly_report(
 def run_pipeline():
     """Triggers the full ETL + ML training pipeline (use with caution in production)."""
     try:
-        from src.pipeline.cleaner import run_cleaning_pipeline
         from src.ml.models import train_all
+        from src.pipeline.cleaner import run_cleaning_pipeline
 
         run_cleaning_pipeline()
         results = train_all()

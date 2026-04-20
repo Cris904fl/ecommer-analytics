@@ -12,14 +12,14 @@ Tasks:
   6. notify_success          → log completion summary
 """
 
+import logging
 from datetime import datetime, timedelta
 from pathlib import Path
 
 from airflow import DAG
-from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
+from airflow.operators.python import PythonOperator
 from airflow.utils.dates import days_ago
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -98,6 +98,7 @@ def _run_cleaning_pipeline(**context):
 def _train_anomaly_detector(**context):
     """Trains IsolationForest anomaly detector on clean data."""
     import pandas as pd
+
     from src.ml.models import AnomalyDetector
 
     df = pd.read_csv("data/processed/orders_clean.csv")
@@ -114,6 +115,7 @@ def _train_anomaly_detector(**context):
 def _train_revenue_forecaster(**context):
     """Trains the weekly revenue forecaster."""
     import pandas as pd
+
     from src.ml.models import RevenueForecaster
 
     df = pd.read_csv("data/processed/orders_clean.csv", parse_dates=["order_date"])
@@ -132,6 +134,7 @@ def _train_revenue_forecaster(**context):
 def _generate_kpi_report(**context):
     """Computes all KPIs and writes an HTML summary report."""
     import json
+
     from src.pipeline.kpis import compute_all_kpis
 
     kpis = compute_all_kpis()
