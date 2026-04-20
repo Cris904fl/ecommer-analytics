@@ -90,9 +90,7 @@ def add_derived_metrics(df: pd.DataFrame) -> pd.DataFrame:
     # Flag: revenue-positive (exclude returns and cancellations)
     df["is_revenue_positive"] = df["status"] == "completed"
 
-    logger.info(
-        "Derived metrics added: gross_revenue, net_revenue, discount_amount, time dims"
-    )
+    logger.info("Derived metrics added: gross_revenue, net_revenue, discount_amount, time dims")
     return df
 
 
@@ -103,9 +101,7 @@ def validate(df: pd.DataFrame) -> None:
     assert df["order_id"].is_unique, "order_id must be unique after dedup"
     assert df["unit_price"].gt(0).all(), "unit_price must be > 0"
     assert df["quantity"].gt(0).all(), "quantity must be > 0"
-    assert (
-        df["discount_pct"].between(0, 100).all()
-    ), "discount_pct out of range [0, 100]"
+    assert df["discount_pct"].between(0, 100).all(), "discount_pct out of range [0, 100]"
     assert df.isnull().sum().sum() == 0, "Unexpected nulls after imputation"
     logger.info("All validation assertions passed ✓")
 

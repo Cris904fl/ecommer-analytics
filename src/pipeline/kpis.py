@@ -99,9 +99,7 @@ def revenue_by_category(df: pd.DataFrame) -> pd.DataFrame:
         .reset_index()
         .sort_values("net_revenue", ascending=False)
     )
-    cat["revenue_share_pct"] = (
-        cat["net_revenue"] / cat["net_revenue"].sum() * 100
-    ).round(2)
+    cat["revenue_share_pct"] = (cat["net_revenue"] / cat["net_revenue"].sum() * 100).round(2)
     return cat.round(2)
 
 
@@ -182,6 +180,4 @@ if __name__ == "__main__":
     print(json.dumps(kpis["summary"], indent=2))
     print("\nTop 3 categories by revenue:")
     for row in kpis["by_category"][:3]:
-        print(
-            f"  {row['category']}: ${row['net_revenue']:,.0f}  ({row['revenue_share_pct']}%)"
-        )
+        print(f"  {row['category']}: ${row['net_revenue']:,.0f}  ({row['revenue_share_pct']}%)")

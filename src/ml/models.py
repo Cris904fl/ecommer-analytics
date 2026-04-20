@@ -104,12 +104,8 @@ class RevenueForecaster:
     def _build_features(self, week_index: np.ndarray) -> np.ndarray:
         features = [week_index.reshape(-1, 1)]
         for k in range(1, self.n_fourier + 1):
-            features.append(
-                np.sin(2 * np.pi * k * week_index / self._period).reshape(-1, 1)
-            )
-            features.append(
-                np.cos(2 * np.pi * k * week_index / self._period).reshape(-1, 1)
-            )
+            features.append(np.sin(2 * np.pi * k * week_index / self._period).reshape(-1, 1))
+            features.append(np.cos(2 * np.pi * k * week_index / self._period).reshape(-1, 1))
         return np.hstack(features)
 
     def prepare_weekly_series(self, df: pd.DataFrame) -> pd.DataFrame:
@@ -129,9 +125,7 @@ class RevenueForecaster:
         X = self._build_features(weekly["week_index"].values)
         y = weekly["net_revenue"].values
 
-        X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=0.2, shuffle=False
-        )
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=False)
         X_train_sc = self.scaler.fit_transform(X_train)
         X_test_sc = self.scaler.transform(X_test)
 
@@ -170,9 +164,7 @@ class RevenueForecaster:
         logger.info(f"Forecaster saved → {path}")
 
     @classmethod
-    def load(
-        cls, path: Path = MODEL_DIR / "revenue_forecaster.pkl"
-    ) -> "RevenueForecaster":
+    def load(cls, path: Path = MODEL_DIR / "revenue_forecaster.pkl") -> "RevenueForecaster":
         instance = cls()
         instance.__dict__.update(joblib.load(path))
         return instance
@@ -218,9 +210,7 @@ def train_all(path: Path = CLEAN_PATH) -> dict:
 
 
 if __name__ == "__main__":
-    logging.basicConfig(
-        level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s"
-    )
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
     results = train_all()
     print("\nForecaster metrics:", results["forecaster_metrics"])
     print("Anomalies by category:")

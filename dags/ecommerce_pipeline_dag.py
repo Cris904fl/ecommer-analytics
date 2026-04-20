@@ -79,9 +79,7 @@ def _validate_raw_data(**context):
         raise ValueError(f"Missing columns in raw data: {missing}")
 
     full_df = pd.read_csv(RAW_PATH)
-    logger.info(
-        f"Raw data validated: {len(full_df):,} rows, {full_df.shape[1]} columns"
-    )
+    logger.info(f"Raw data validated: {len(full_df):,} rows, {full_df.shape[1]} columns")
     context["ti"].xcom_push(key="raw_row_count", value=len(full_df))
 
 
@@ -124,9 +122,7 @@ def _train_revenue_forecaster(**context):
 
     forecast = forecaster.forecast(n_weeks=4)
     next_week_rev = forecast["forecasted_net_revenue"].iloc[0]
-    context["ti"].xcom_push(
-        key="next_week_forecast", value=round(float(next_week_rev), 2)
-    )
+    context["ti"].xcom_push(key="next_week_forecast", value=round(float(next_week_rev), 2))
     logger.info(f"Next week forecast: ${next_week_rev:,.2f}")
 
 
@@ -161,9 +157,7 @@ def _notify_success(**context):
     raw_rows = ti.xcom_pull(task_ids="validate_raw_data", key="raw_row_count")
     clean_rows = ti.xcom_pull(task_ids="run_cleaning_pipeline", key="clean_row_count")
     anomalies = ti.xcom_pull(task_ids="train_anomaly_detector", key="anomaly_count")
-    next_week = ti.xcom_pull(
-        task_ids="train_revenue_forecaster", key="next_week_forecast"
-    )
+    next_week = ti.xcom_pull(task_ids="train_revenue_forecaster", key="next_week_forecast")
     net_revenue = ti.xcom_pull(task_ids="generate_kpi_report", key="total_net_revenue")
     orders = ti.xcom_pull(task_ids="generate_kpi_report", key="total_orders")
 
