@@ -6,10 +6,8 @@ derived metrics (revenue, discount_amount, margin proxy).
 """
 
 import logging
-from datetime import datetime
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 
 logging.basicConfig(

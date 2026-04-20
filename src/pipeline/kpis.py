@@ -13,7 +13,6 @@ Computes business KPIs from clean order data:
 import logging
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 
 logger = logging.getLogger(__name__)
@@ -23,7 +22,7 @@ CLEAN_PATH = Path("data/processed/orders_clean.csv")
 
 def load_clean(path: Path = CLEAN_PATH) -> pd.DataFrame:
     df = pd.read_csv(path, parse_dates=["order_date"])
-    return df[df["is_revenue_positive"] == True].copy()
+    return df[df["is_revenue_positive"]].copy()
 
 
 # ─────────────────────────────────────────────

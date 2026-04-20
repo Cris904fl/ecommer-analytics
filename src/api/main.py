@@ -16,21 +16,18 @@ Endpoints:
   POST /pipeline/run       → trigger full pipeline (admin)
 """
 
+import logging
 import sys
 from pathlib import Path
 
-# Allow running from project root
 sys.path.insert(0, str(Path(__file__).parents[2]))
 
-import logging
+import pandas as pd  # noqa: E402
+from fastapi import FastAPI, HTTPException, Query  # noqa: E402
+from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
 
-import pandas as pd
-from fastapi import FastAPI, HTTPException, Query
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-
-from src.ml.models import MODEL_DIR, AnomalyDetector, RevenueForecaster
-from src.pipeline.kpis import CLEAN_PATH, compute_all_kpis, load_clean
+from src.ml.models import MODEL_DIR, AnomalyDetector, RevenueForecaster  # noqa: E402
+from src.pipeline.kpis import CLEAN_PATH, compute_all_kpis  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
