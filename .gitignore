@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+
+# Models (heavy files - use DVC or artifact storage)
+models/*.pkl
+
+# Environment
+.env
+.env.*
+
+# Airflow
+airflow.db
+airflow-webserver.pid
+logs/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
